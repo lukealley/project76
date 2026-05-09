@@ -103,6 +103,36 @@
     margin-top: 4px;
   }
 
+  /* INTRO 2 SCREEN */
+  #screen-intro2 {
+    justify-content: space-between;
+    padding: 0;
+  }
+
+  .intro2-body {
+    flex: 1;
+    padding: 56px 28px 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 24px;
+  }
+
+  .intro2-text {
+    font-size: 20px;
+    line-height: 1.7;
+    color: var(--white);
+    opacity: 0.9;
+  }
+
+  .intro2-footer {
+    padding: 20px 28px 36px;
+    flex-shrink: 0;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+
   /* PROGRESS BAR */
   .progress-bar-wrap {
     background: var(--gray);
@@ -531,6 +561,20 @@
   </div>
 </div>
 
+<!-- INTRO 2 -->
+<div id="screen-intro2" class="screen">
+  <div class="intro2-body">
+    <p class="intro2-text">Think of this as a conversation before the conversation. We'll use your answers to understand where you're at, what's not working, and what a custom-built tool could actually fix for you.</p>
+    <p class="intro2-text">It takes about 10 minutes. You can change your answers later — nothing here is permanent. Just be real with us.</p>
+  </div>
+  <div class="intro2-footer">
+    <button class="btn-back" onclick="showScreen('screen-intro')" style="visibility:visible">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+    </button>
+    <button class="btn-next" onclick="startQuestions()">LET'S GO →</button>
+  </div>
+</div>
+
 <!-- QUESTIONS -->
 <div id="screen-questions" class="screen">
   <div class="progress-bar-wrap">
@@ -645,6 +689,10 @@ let current = 0;
 let answers = {};
 
 function startForm() {
+  showScreen('screen-intro2');
+}
+
+function startQuestions() {
   showScreen('screen-questions');
   renderQ(0);
 }
@@ -761,7 +809,7 @@ function prevQ() {
     current--;
     renderQ(current);
   } else {
-    showScreen('screen-intro');
+    showScreen('screen-intro2');
   }
 }
 
