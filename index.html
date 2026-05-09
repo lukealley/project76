@@ -664,7 +664,7 @@ function renderQ(i) {
   document.getElementById('q-number').textContent = `Question ${i+1} of ${total}`;
   document.getElementById('q-text').textContent = q.text;
   document.getElementById('q-sub').textContent = q.sub || '';
-  document.getElementById('btn-back').style.visibility = i === 0 ? 'hidden' : 'visible';
+  document.getElementById('btn-back').style.visibility = 'visible';
 
   const body = document.getElementById('q-body');
   body.innerHTML = '';
@@ -760,6 +760,8 @@ function prevQ() {
   if (current > 0) {
     current--;
     renderQ(current);
+  } else {
+    showScreen('screen-intro');
   }
 }
 
