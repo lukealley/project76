@@ -524,6 +524,45 @@
 
   .copy-confirm.show { opacity: 1; }
 
+  /* SETUP STEPS */
+  .setup-step {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 22px;
+    align-items: flex-start;
+  }
+
+  .setup-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    color: var(--orange);
+    flex-shrink: 0;
+    width: 20px;
+    line-height: 1.2;
+  }
+
+  .setup-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--white);
+    margin-bottom: 4px;
+  }
+
+  .setup-body {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+
+  .setup-body code {
+    font-family: monospace;
+    font-size: 12px;
+    color: var(--orange);
+    background: var(--gray);
+    padding: 1px 5px;
+    border-radius: 3px;
+  }
+
   .btn-email {
     width: 100%;
     height: 52px;
@@ -611,6 +650,78 @@
       <button class="btn-copy" onclick="copyPrompt()">COPY PROMPT →</button>
       <button class="btn-email" onclick="emailPrompt()">EMAIL TO ME →</button>
       <p style="font-size:12px; opacity:0.45; text-align:center;">Paste into Claude Code to begin Session 1.</p>
+      <button class="btn-next" style="width:100%; margin-top:24px;" onclick="showScreen('screen-setup')">WHAT'S NEXT →</button>
+    </div>
+  </div>
+</div>
+
+<!-- SETUP -->
+<div id="screen-setup" class="screen">
+  <div class="done-top">
+    <div class="label">Before Session 1</div>
+    <h2>GET YOUR<br>TOOLS<br>READY.</h2>
+  </div>
+  <div class="done-bottom" style="overflow-y:auto;">
+    <div>
+      <p style="font-size:13px; color:var(--text-muted); margin-bottom:24px;">~60–90 min · Do this at least 24 hours before your first session.</p>
+
+      <div class="setup-step">
+        <div class="setup-num">1</div>
+        <div>
+          <div class="setup-title">Create three accounts</div>
+          <div class="setup-body">Claude.ai (Pro or Max plan) · GitHub (free) · Vercel (free — sign up with GitHub)</div>
+        </div>
+      </div>
+
+      <div class="setup-step">
+        <div class="setup-num">2</div>
+        <div>
+          <div class="setup-title">Install Claude Desktop</div>
+          <div class="setup-body">Download at claude.ai/download · Sign in with your Claude account</div>
+        </div>
+      </div>
+
+      <div class="setup-step">
+        <div class="setup-num">3</div>
+        <div>
+          <div class="setup-title">Install Claude Code</div>
+          <div class="setup-body">Mac: paste into Terminal →<br><code>curl -fsSL https://claude.ai/install.sh | bash</code><br><br>Windows: paste into PowerShell (run as admin) →<br><code>irm https://claude.ai/install.ps1 | iex</code><br><br>Then type <code>claude --version</code> to confirm it worked.</div>
+        </div>
+      </div>
+
+      <div class="setup-step">
+        <div class="setup-num">4</div>
+        <div>
+          <div class="setup-title">Install Git</div>
+          <div class="setup-body">Mac: type <code>git --version</code> in Terminal — it'll prompt you to install if needed<br>Windows: download from git-scm.com/download/win · use all default settings</div>
+        </div>
+      </div>
+
+      <div class="setup-step">
+        <div class="setup-num">5</div>
+        <div>
+          <div class="setup-title">Connect GitHub to Vercel</div>
+          <div class="setup-body">Log into vercel.com → Add New Project → connect your GitHub account. You don't need to deploy anything yet.</div>
+        </div>
+      </div>
+
+      <div class="setup-step">
+        <div class="setup-num">6</div>
+        <div>
+          <div class="setup-title">Email us when you're done</div>
+          <div class="setup-body">Reply to your confirmation email with: "I'm set up and ready." If something didn't work, send a screenshot — that's exactly why we ask 24 hrs early.</div>
+        </div>
+      </div>
+
+      <div style="margin-top:8px; padding:16px; background:var(--gray); border-radius:8px;">
+        <p style="font-size:13px; color:var(--text-muted); line-height:1.6; margin:0;">Stuck? Don't push through alone. Reply to your confirmation email with a screenshot of the error and we'll sort it before Session 1.</p>
+      </div>
+
+      <div style="margin-top:20px; display:flex; gap:12px; align-items:center;">
+        <button class="btn-back" onclick="showScreen('screen-done')" style="visibility:visible">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+        </button>
+      </div>
     </div>
   </div>
 </div>
