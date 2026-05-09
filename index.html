@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Project 76</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0a0a0a;
+    --white: #f5f0e8;
+    --orange: #e8540a;
+    --orange-dim: #c4430a;
+    --gray: #1e1e1e;
+    --gray-light: #2e2e2e;
+    --text-muted: #888;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* SCREEN SYSTEM */
+  .screen {
+    display: none;
+    min-height: 100vh;
+    padding: 0;
+    animation: fadeUp 0.4s ease forwards;
+  }
+  .screen.active { display: flex; flex-direction: column; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* INTRO SCREEN */
+  #screen-intro {
+    justify-content: space-between;
+    padding: 0;
+  }
+
+  .intro-top {
+    background: var(--orange);
+    padding: 48px 28px 36px;
+    flex-shrink: 0;
+  }
+
+  .intro-top .label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    opacity: 0.8;
+    margin-bottom: 12px;
+  }
+
+  .intro-top h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 88px;
+    line-height: 0.9;
+    color: var(--black);
+    letter-spacing: 0.02em;
+  }
+
+  .intro-bottom {
+    padding: 32px 28px 48px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .intro-bottom p {
+    font-size: 17px;
+    line-height: 1.65;
+    color: var(--white);
+    opacity: 0.85;
+    margin-bottom: 12px;
+  }
+
+  .intro-bottom .time-note {
+    font-size: 13px;
+    color: var(--text-muted);
+    letter-spacing: 0.05em;
+    margin-top: 4px;
+  }
+
+  /* PROGRESS BAR */
+  .progress-bar-wrap {
+    background: var(--gray);
+    height: 3px;
+    width: 100%;
+    flex-shrink: 0;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    background: var(--orange);
+    transition: width 0.4s ease;
+  }
+
+  /* QUESTION HEADER */
+  .q-header {
+    padding: 24px 28px 0;
+    flex-shrink: 0;
+  }
+
+  .section-tag {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 10px;
+  }
+
+  .q-number {
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 0.1em;
+    margin-bottom: 14px;
+  }
+
+  .q-text {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 30px;
+    line-height: 1.15;
+    color: var(--white);
+    letter-spacing: 0.03em;
+  }
+
+  .q-sub {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-top: 8px;
+    line-height: 1.5;
+  }
+
+  /* QUESTION BODY */
+  .q-body {
+    padding: 28px 28px 0;
+    flex: 1;
+    overflow-y: auto;
+  }
+
+  /* SCALE QUESTION */
+  .scale-item {
+    margin-bottom: 22px;
+  }
+
+  .scale-label {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--white);
+    margin-bottom: 10px;
+    opacity: 0.9;
+  }
+
+  .scale-track {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .scale-track input[type=range] {
+    flex: 1;
+    -webkit-appearance: none;
+    height: 3px;
+    background: var(--gray-light);
+    border-radius: 2px;
+    outline: none;
+  }
+
+  .scale-track input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 22px;
+    height: 22px;
+    background: var(--orange);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform 0.15s;
+  }
+
+  .scale-track input[type=range]::-webkit-slider-thumb:active {
+    transform: scale(1.3);
+  }
+
+  .scale-val {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    color: var(--orange);
+    min-width: 28px;
+    text-align: right;
+  }
+
+  /* CHECKBOX MULTI */
+  .check-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .check-option {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+    background: var(--gray);
+    border-radius: 8px;
+    cursor: pointer;
+    border: 1.5px solid transparent;
+    transition: border-color 0.2s, background 0.2s;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .check-option.selected {
+    border-color: var(--orange);
+    background: #1a1008;
+  }
+
+  .check-box {
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    border: 1.5px solid var(--gray-light);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s, border-color 0.2s;
+  }
+
+  .check-option.selected .check-box {
+    background: var(--orange);
+    border-color: var(--orange);
+  }
+
+  .check-box svg { display: none; }
+  .check-option.selected .check-box svg { display: block; }
+
+  .check-label {
+    font-size: 15px;
+    color: var(--white);
+    opacity: 0.85;
+  }
+
+  /* TEXT INPUT */
+  textarea, input[type=text] {
+    width: 100%;
+    background: var(--gray);
+    border: 1.5px solid var(--gray-light);
+    border-radius: 8px;
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 300;
+    padding: 16px;
+    outline: none;
+    resize: none;
+    line-height: 1.6;
+    transition: border-color 0.2s;
+    -webkit-appearance: none;
+  }
+
+  textarea:focus, input[type=text]:focus {
+    border-color: var(--orange);
+  }
+
+  textarea::placeholder, input[type=text]::placeholder {
+    color: var(--text-muted);
+  }
+
+  /* RADIO OPTIONS */
+  .radio-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .radio-option {
+    padding: 14px 16px;
+    background: var(--gray);
+    border-radius: 8px;
+    cursor: pointer;
+    border: 1.5px solid transparent;
+    font-size: 15px;
+    color: var(--white);
+    opacity: 0.85;
+    transition: border-color 0.2s, background 0.2s;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .radio-option.selected {
+    border-color: var(--orange);
+    background: #1a1008;
+    opacity: 1;
+  }
+
+  /* FOOTER NAV */
+  .q-footer {
+    padding: 20px 28px 36px;
+    flex-shrink: 0;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .btn-back {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--gray);
+    border: none;
+    color: var(--white);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .btn-next {
+    flex: 1;
+    height: 52px;
+    background: var(--orange);
+    border: none;
+    border-radius: 8px;
+    color: var(--black);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: background 0.2s;
+  }
+
+  .btn-next:active { background: var(--orange-dim); }
+
+  /* START BUTTON */
+  .btn-start {
+    width: 100%;
+    height: 56px;
+    background: var(--black);
+    border: 1.5px solid var(--white);
+    border-radius: 8px;
+    color: var(--white);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 0.12em;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .btn-start:active { background: var(--white); color: var(--black); }
+
+  /* DONE SCREEN */
+  #screen-done {
+    justify-content: space-between;
+    padding: 0;
+  }
+
+  .done-top {
+    background: var(--orange);
+    padding: 48px 28px 36px;
+  }
+
+  .done-top h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 64px;
+    line-height: 0.95;
+    color: var(--black);
+  }
+
+  .done-bottom {
+    padding: 32px 28px 48px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .done-bottom p {
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--white);
+    opacity: 0.85;
+    margin-bottom: 16px;
+  }
+
+  .summary-block {
+    background: var(--gray);
+    border-radius: 8px;
+    padding: 18px;
+    margin-bottom: 28px;
+  }
+
+  .summary-block .s-label {
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 6px;
+  }
+
+  .summary-block .s-val {
+    font-size: 14px;
+    color: var(--white);
+    opacity: 0.85;
+    line-height: 1.5;
+  }
+
+  .divider {
+    height: 1px;
+    background: var(--gray-light);
+    margin: 10px 0;
+  }
+
+  .prompt-block {
+    background: var(--gray);
+    border-radius: 8px;
+    padding: 18px;
+    margin-bottom: 16px;
+    position: relative;
+  }
+
+  .prompt-block textarea {
+    background: transparent;
+    border: none;
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    line-height: 1.7;
+    width: 100%;
+    resize: none;
+    outline: none;
+    opacity: 0.85;
+    padding: 0;
+    border-radius: 0;
+  }
+
+  .prompt-block textarea:focus {
+    border-color: transparent;
+  }
+
+  .btn-copy {
+    width: 100%;
+    height: 52px;
+    background: var(--orange);
+    border: none;
+    border-radius: 8px;
+    color: var(--black);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: background 0.2s;
+    margin-bottom: 12px;
+  }
+
+  .btn-copy:active { background: var(--orange-dim); }
+
+  .copy-confirm {
+    font-size: 12px;
+    color: var(--orange);
+    text-align: center;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    height: 18px;
+    margin-bottom: 8px;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .copy-confirm.show { opacity: 1; }
+
+  .btn-email {
+    width: 100%;
+    height: 52px;
+    background: transparent;
+    border: 1.5px solid var(--orange);
+    border-radius: 8px;
+    color: var(--orange);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    transition: background 0.2s, color 0.2s;
+    margin-bottom: 12px;
+  }
+
+  .btn-email:active { background: var(--orange); color: var(--black); }
+</style>
+</head>
+<body>
+
+<!-- INTRO -->
+<div id="screen-intro" class="screen active">
+  <div class="intro-top">
+    <div class="label">Your life. Your tool.</div>
+    <h1>PROJECT<br>76</h1>
+  </div>
+  <div class="intro-bottom">
+    <div>
+      <p>Before we build your app, we need to understand where you are and where you want to go.</p>
+      <p class="time-note">⏱ About 5–7 minutes</p>
+    </div>
+    <button class="btn-start" onclick="startForm()">BEGIN →</button>
+  </div>
+</div>
+
+<!-- QUESTIONS -->
+<div id="screen-questions" class="screen">
+  <div class="progress-bar-wrap">
+    <div class="progress-bar-fill" id="progress-fill" style="width:0%"></div>
+  </div>
+  <div class="q-header">
+    <div class="section-tag" id="q-section"></div>
+    <div class="q-number" id="q-number"></div>
+    <div class="q-text" id="q-text"></div>
+    <div class="q-sub" id="q-sub"></div>
+  </div>
+  <div class="q-body" id="q-body"></div>
+  <div class="q-footer">
+    <button class="btn-back" id="btn-back" onclick="prevQ()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+    </button>
+    <button class="btn-next" id="btn-next" onclick="nextQ()">NEXT →</button>
+  </div>
+</div>
+
+<!-- DONE -->
+<div id="screen-done" class="screen">
+  <div class="done-top">
+    <div class="label">You're in.</div>
+    <h2>THAT'S<br>WHAT WE<br>NEEDED.</h2>
+  </div>
+  <div class="done-bottom">
+    <div>
+      <p>Copy this prompt and paste it into Claude Code to start building your app.</p>
+      <div class="prompt-block">
+        <textarea id="prompt-output" rows="14" readonly></textarea>
+      </div>
+      <div class="copy-confirm" id="copy-confirm">Copied to clipboard ✓</div>
+      <button class="btn-copy" onclick="copyPrompt()">COPY PROMPT →</button>
+      <button class="btn-email" onclick="emailPrompt()">EMAIL TO ME →</button>
+      <p style="font-size:12px; opacity:0.45; text-align:center;">Paste into Claude Code to begin Session 1.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+const QUESTIONS = [
+  // SECTION 1
+  { id:'s1_health',    section:'Life Satisfaction', text:'Health & Energy', sub:'1 = struggling · 10 = thriving', type:'scale' },
+  { id:'s1_finances',  section:'Life Satisfaction', text:'Finances & Money', sub:'1 = struggling · 10 = thriving', type:'scale' },
+  { id:'s1_work',      section:'Life Satisfaction', text:'Work & Purpose', sub:'1 = struggling · 10 = thriving', type:'scale' },
+  { id:'s1_relations', section:'Life Satisfaction', text:'Relationships & Family', sub:'1 = struggling · 10 = thriving', type:'scale' },
+  { id:'s1_growth',    section:'Life Satisfaction', text:'Personal Growth & Fun', sub:'1 = struggling · 10 = thriving', type:'scale' },
+  {
+    id:'s1_urgent', section:'Life Satisfaction',
+    text:'Which 1–2 areas feel most urgent to change right now?',
+    sub:'Pick up to 2.',
+    type:'multi',
+    options:['Health & Energy','Finances & Money','Work & Purpose','Relationships & Family','Personal Growth & Fun'],
+    max: 2
+  },
+  // SECTION 2
+  {
+    id:'s2_year', section:'One Year From Now',
+    text:"It's one year from today and things went well. What's different about your life?",
+    type:'textarea',
+    placeholder:'Be specific. What does a good day look like?'
+  },
+  {
+    id:'s2_noticed', section:'One Year From Now',
+    text:'What would the person closest to you notice has changed?',
+    type:'text',
+    placeholder:'One sentence is fine.'
+  },
+  // SECTION 3
+  {
+    id:'s3_meaning', section:"What's In the Way",
+    text:'What do you keep meaning to fix but never do?',
+    type:'text',
+    placeholder:'Be honest.'
+  },
+  {
+    id:'s3_change', section:"What's In the Way",
+    text:'If one thing were working better, it would change everything. What is it?',
+    type:'text',
+    placeholder:'Health, money, relationships, focus...'
+  },
+  // SECTION 4
+  {
+    id:'s4_name', section:'Quick Setup',
+    text:"What's your first name?",
+    type:'text',
+    placeholder:'First name'
+  },
+  {
+    id:'s4_email', section:'Quick Setup',
+    text:"What's your email address?",
+    sub:"We'll send your Claude Code prompt here so you can paste it and start building your app anytime.",
+    type:'email',
+    placeholder:'you@example.com'
+  },
+  {
+    id:'s4_tech', section:'Quick Setup',
+    text:'How comfortable are you with technology?',
+    type:'radio',
+    options:['Pretty comfortable','I get by','I avoid it if I can']
+  },
+  {
+    id:'s4_device', section:'Quick Setup',
+    text:'What device do you use most?',
+    type:'radio',
+    options:['iPhone','Android','Laptop or Mac','Desktop PC']
+  }
+];
+
+let current = 0;
+let answers = {};
+
+function startForm() {
+  showScreen('screen-questions');
+  renderQ(0);
+}
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  const el = document.getElementById(id);
+  el.classList.add('active');
+}
+
+function renderQ(i) {
+  const q = QUESTIONS[i];
+  const total = QUESTIONS.length;
+
+  document.getElementById('progress-fill').style.width = ((i / total) * 100) + '%';
+  document.getElementById('q-section').textContent = q.section;
+  document.getElementById('q-number').textContent = `Question ${i+1} of ${total}`;
+  document.getElementById('q-text').textContent = q.text;
+  document.getElementById('q-sub').textContent = q.sub || '';
+  document.getElementById('btn-back').style.visibility = i === 0 ? 'hidden' : 'visible';
+
+  const body = document.getElementById('q-body');
+  body.innerHTML = '';
+
+  const saved = answers[q.id];
+
+  if (q.type === 'scale') {
+    const val = saved !== undefined ? saved : 5;
+    body.innerHTML = `
+      <div class="scale-item">
+        <div class="scale-track">
+          <input type="range" min="1" max="10" value="${val}" id="range-input"
+            oninput="document.getElementById('range-val').textContent=this.value; answers['${q.id}']=parseInt(this.value)">
+          <div class="scale-val" id="range-val">${val}</div>
+        </div>
+      </div>
+    `;
+    answers[q.id] = val;
+
+  } else if (q.type === 'multi') {
+    const selected = saved || [];
+    let html = '<div class="check-options">';
+    q.options.forEach(opt => {
+      const isSel = selected.includes(opt);
+      html += `
+        <div class="check-option ${isSel ? 'selected' : ''}" onclick="toggleMulti('${q.id}', '${opt}', ${q.max}, this)">
+          <div class="check-box">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="#0a0a0a" stroke-width="2.5"><path d="M2 6l3 3 5-5"/></svg>
+          </div>
+          <span class="check-label">${opt}</span>
+        </div>`;
+    });
+    html += '</div>';
+    body.innerHTML = html;
+    if (!saved) answers[q.id] = [];
+
+  } else if (q.type === 'textarea') {
+    body.innerHTML = `<textarea rows="6" placeholder="${q.placeholder || ''}" id="ta-input">${saved || ''}</textarea>`;
+    document.getElementById('ta-input').addEventListener('input', e => { answers[q.id] = e.target.value; });
+
+  } else if (q.type === 'text') {
+    body.innerHTML = `<input type="text" placeholder="${q.placeholder || ''}" id="text-input" value="${saved || ''}">`;
+    document.getElementById('text-input').addEventListener('input', e => { answers[q.id] = e.target.value; });
+
+  } else if (q.type === 'email') {
+    body.innerHTML = `<input type="email" placeholder="${q.placeholder || ''}" id="text-input" value="${saved || ''}">`;
+    document.getElementById('text-input').addEventListener('input', e => { answers[q.id] = e.target.value; });
+
+  } else if (q.type === 'radio') {
+    let html = '<div class="radio-options">';
+    q.options.forEach(opt => {
+      html += `<div class="radio-option ${saved === opt ? 'selected' : ''}" onclick="selectRadio('${q.id}', '${opt}', this)">${opt}</div>`;
+    });
+    html += '</div>';
+    body.innerHTML = html;
+  }
+
+  const btnNext = document.getElementById('btn-next');
+  btnNext.textContent = i === QUESTIONS.length - 1 ? 'FINISH →' : 'NEXT →';
+}
+
+function toggleMulti(id, val, max, el) {
+  if (!answers[id]) answers[id] = [];
+  const arr = answers[id];
+  const idx = arr.indexOf(val);
+  if (idx > -1) {
+    arr.splice(idx, 1);
+    el.classList.remove('selected');
+  } else {
+    if (arr.length >= max) return;
+    arr.push(val);
+    el.classList.add('selected');
+  }
+}
+
+function selectRadio(id, val, el) {
+  answers[id] = val;
+  el.closest('.radio-options').querySelectorAll('.radio-option').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+function nextQ() {
+  if (current < QUESTIONS.length - 1) {
+    current++;
+    renderQ(current);
+    document.getElementById('screen-questions').scrollTop = 0;
+  } else {
+    showDone();
+  }
+}
+
+function prevQ() {
+  if (current > 0) {
+    current--;
+    renderQ(current);
+  }
+}
+
+function showDone() {
+  const name = answers['s4_name'] || 'Someone';
+  const tech = answers['s4_tech'] || 'comfortable with technology';
+  const device = answers['s4_device'] || 'a phone';
+  const urgent = (answers['s1_urgent'] || []).join(' and ') || 'overall life balance';
+  const change = answers['s3_change'] || '(not specified)';
+  const meaning = answers['s3_meaning'] || '(not specified)';
+  const year = answers['s2_year'] || '(not specified)';
+  const noticed = answers['s2_noticed'] || '(not specified)';
+
+  const scores = [
+    { label: 'Health & Energy', val: answers['s1_health'] || 5 },
+    { label: 'Finances & Money', val: answers['s1_finances'] || 5 },
+    { label: 'Work & Purpose', val: answers['s1_work'] || 5 },
+    { label: 'Relationships & Family', val: answers['s1_relations'] || 5 },
+    { label: 'Personal Growth & Fun', val: answers['s1_growth'] || 5 },
+  ];
+  const sortedScores = [...scores].sort((a,b) => a.val - b.val);
+  const lowest = sortedScores[0];
+  const scoreLines = scores.map(s => `  - ${s.label}: ${s.val}/10`).join('\n');
+
+  const prompt = `I want to build a personal life management app for someone named ${name}. Here is their profile from an onboarding assessment — use this to guide every design and feature decision.
+
+## User Profile
+
+**Name:** ${name}
+**Primary device:** ${device}
+**Tech comfort:** ${tech}
+
+## Life Satisfaction Scores (1–10)
+${scoreLines}
+
+**Lowest area:** ${lowest.label} (${lowest.val}/10)
+**Most urgent to change:** ${urgent}
+
+## Goals & Vision
+
+**One year from now (their words):**
+"${year}"
+
+**What the people closest to them would notice:**
+"${noticed}"
+
+**The one thing they keep meaning to fix:**
+"${meaning}"
+
+**The one change that would change everything:**
+"${change}"
+
+## What to Build
+
+Design and build a focused, simple app that helps ${name} make real progress on ${urgent}. The app should:
+
+- Be optimized for ${device}
+- Match a user who is "${tech}" with technology — keep the UI straightforward and friction-free
+- Center on the most impactful area: ${lowest.label}
+- Reflect their one-year vision as the north star
+- Prioritize daily habits and small wins over complex dashboards
+
+Start by proposing the core feature set (3–5 screens max), then build it.`;
+
+  document.getElementById('prompt-output').value = prompt;
+  document.querySelector('#screen-done .label').textContent = `${name}, you're in.`;
+  showScreen('screen-done');
+}
+
+function emailPrompt() {
+  const email = answers['s4_email'] || '';
+  const subject = encodeURIComponent('Your Project 76 Claude Code Prompt');
+  const body = encodeURIComponent(document.getElementById('prompt-output').value);
+  window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
+}
+
+function copyPrompt() {
+  const ta = document.getElementById('prompt-output');
+  ta.select();
+  ta.setSelectionRange(0, 99999);
+  navigator.clipboard.writeText(ta.value).catch(() => {
+    document.execCommand('copy');
+  });
+  const confirm = document.getElementById('copy-confirm');
+  confirm.classList.add('show');
+  setTimeout(() => confirm.classList.remove('show'), 2500);
+}
+</script>
+</body>
+</html>
